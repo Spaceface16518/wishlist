@@ -1,20 +1,6 @@
-import { useEffect, useState } from "react";
 import supabase from "../lib/supabase";
-import { RealtimeSubscription } from "@supabase/realtime-js";
 
 const Wishes = ({ wishes }: { wishes: any[] }) => {
-
-  async function claimWish (id: number) {
-    try {
-      await supabase.from("claims")
-        .insert({ wish: id }, { returning: "minimal" })
-        .throwOnError();
-    } catch (e) {
-      // TODO: handler claim error
-      console.log(e);
-    }
-  }
-
   return (
     <div>
       <h1>Wish List</h1>
@@ -22,7 +8,7 @@ const Wishes = ({ wishes }: { wishes: any[] }) => {
         <ul>
           {
             wishes.map(wish => (
-              <Wish wish={wish} onClaim={claimWish} key={wish.id}/>
+              <Wish wish={wish} key={wish.id}/>
             ))
           }
         </ul>
@@ -31,10 +17,7 @@ const Wishes = ({ wishes }: { wishes: any[] }) => {
   );
 };
 
-const Wish = ({ wish, onClaim }: { wish: WishData, onClaim: () => void }) => {
-  const [claim, setClaim] = useState("");
-  const [user, setUser] = useState(-1);
-
+const Wish = ({ wish }: { wish: WishData }) => {
   return (
     <li>
       <div>
